@@ -170,9 +170,10 @@ class BuildPlugin implements Plugin<Project>  {
      */
     private static void configureRepositories(Project project) {
         project.repositories.mavenCentral()
-        project.repositories.maven { url "https://conjars.org/repo" }
+        project.repositories.maven { url "https://conjars.wensel.net/repo" }
         project.repositories.maven { url "https://clojars.org/repo" }
-        project.repositories.maven { url 'https://repo.spring.io/plugins-release' }
+        project.repositories.maven { url "https://maven.aliyun.com/repository/spring-plugin"}
+//        project.repositories.maven { url 'https://repo.spring.io/plugins-release' }
 
         // Elastic artifacts
         project.repositories.maven { url "https://artifacts.elastic.co/maven/" } // default
@@ -248,9 +249,11 @@ class BuildPlugin implements Plugin<Project>  {
 
                 resolve.eachDependency { DependencyResolveDetails details ->
                     // There are tons of slf4j-* variants. Search for all of them, and lock them down.
+
                     if (details.requested.name.contains("slf4j-")) {
                         details.useVersion "1.7.6"
                     }
+
                     // Be careful with log4j version settings as they can be easily missed.
                     if (details.requested.name.contains("org.apache.logging.log4j") && details.requested.name.contains("log4j-")) {
                         details.useVersion project.ext.log4jVersion
@@ -258,6 +261,20 @@ class BuildPlugin implements Plugin<Project>  {
                     // Convert any references to the servlet-api into the jetty servlet artifact.
                     if (details.requested.name.equals("servlet-api")) {
                         details.useTarget group: "org.eclipse.jetty.orbit", name: "javax.servlet", version: "3.0.0.v201112011016"
+                    }
+
+
+                    if (project.path.equals(":elasticsearch-spark-30")){
+                        def name = details.requested.name
+                        if (details.requested.name.contains("slf4j-")) {
+                            details.useVersion("1.7.32")
+                        }
+                        if (details.requested.name.equals("log4j-slf4j-impl")){
+                            details.useVersion("2.17.2")
+                        }
+                        if (details.requested.name.contains("org.apache.logging.log4j") && details.requested.name.contains("log4j-")) {
+                            details.useVersion ("2.17.2")
+                        }
                     }
 
                 }
@@ -461,7 +478,7 @@ class BuildPlugin implements Plugin<Project>  {
                         if (cascading)
                             repository {
                                 id = 'conjars.org'
-                                url = 'https://conjars.org/repo'
+                                url = 'https://conjars.wensel.net/repo'
                             }
                         if (storm)
                             repository {

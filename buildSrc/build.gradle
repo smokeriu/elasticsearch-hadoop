@@ -17,7 +17,7 @@ String esVersion = props.getProperty('elasticsearch')
 boolean snapshot = "true".equals(System.getProperty("build.snapshot", "true"))
 if (snapshot) {
     // we update the version property to reflect if we are building a snapshot or a release build
-    version += "-SNAPSHOT"
+    version += "-PLATFORM"
     props.put("eshadoop", version)
 }
 
@@ -26,7 +26,15 @@ repositories {
     mavenCentral()
 
     // For resolving propdeps (provided/optional dependencies)
-    maven { url 'https://repo.spring.io/plugins-release' }
+    // ali库 propdeps-plugin
+    maven{ url 'https://maven.aliyun.com/repository/central'}
+    maven{ url 'https://maven.aliyun.com/repository/public' }
+    maven{ url 'https://maven.aliyun.com/repository/google'}
+    maven{ url 'https://maven.aliyun.com/repository/gradle-plugin'}
+    maven{ url 'https://maven.aliyun.com/repository/spring'}
+    maven{ url 'https://maven.aliyun.com/repository/spring-plugin'}
+    maven{ url 'https://maven.aliyun.com/mvn/guide'}
+    maven{ url 'https://maven.aliyun.com/repository/apache-snapshots'}
 
     // For Elasticsearch snapshots.
     if (localRepo) {
