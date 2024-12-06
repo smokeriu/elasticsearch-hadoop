@@ -79,6 +79,9 @@ public class EsMajorVersion {
         if (version.startsWith("6.")) {
             return new EsMajorVersion((byte) 6, version);
         }
+        if (version.startsWith("7.")) {
+            return new EsMajorVersion((byte) 6, version);
+        }
         throw new EsHadoopIllegalArgumentException("Unsupported/Unknown Elasticsearch version " + version);
     }
 
